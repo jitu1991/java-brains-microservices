@@ -17,34 +17,36 @@ import org.springframework.web.reactive.function.client.WebClient.Builder;
 import com.javabrains.moviecatalogservice.model.CatalogItem;
 import com.javabrains.moviecatalogservice.model.Movie;
 import com.javabrains.moviecatalogservice.model.Rating;
+import com.javabrains.moviecatalogservice.model.UserRating;
 
 @RestController
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
-	
+
 	@Autowired
 	RestTemplate restTemplate;
-	
+
 	@Autowired
 	WebClient.Builder webClientBuilder;
-	
+
 	@GetMapping("/{userId}")
 	public List<CatalogItem> getCatalog(@PathVariable String userId) {
-		
-		//To Build web client
-		//WebClient.Builder builder = WebClient.builder();
-		
-		List<Rating> ratings = Arrays.asList(new Rating("1234", 4),
-				new Rating("5678",3));
-		
-		return ratings.stream().map(rating -> {
-			//Movie movie = restTemplate.getForObject("http://localhost:8081/movies/" + rating.getMovieId(), Movie.class);
-			
-			//Using weclient builder
-			Movie movie = webClientBuilder.build().get().uri("http://localhost:8081/movies/" + rating.getMovieId()).retrieve().bodyToMono(Movie.class).block();
+		UserRating ratings = restTemplate.getForObject("http://localhost:8082/ratingdata/users/" + userId,
+				UserRating.class);
+
+		return ratings.getUserRating().stream().map(rating -> {
+			// For each movie Id, call movie-info-service and get details
+			Movie movie = restTemplate.getForObject("http://localhost:8081/movies/" + rating.getMovieId(), Movie.class);
 			return new CatalogItem(movie.getName(), "Test", rating.getRating());
 		}).collect(Collectors.toList());
-		
-		//return Collections.singletonList(new CatalogItem(userId, "Transformer", 3));
+
+		// To Build web client
+		// WebClient.Builder builder = WebClient.builder();
+
+		// Using weclient builder
+		// Movie movie =
+		// webClientBuilder.build().get().uri("http://localhost:8081/movies/" +
+		// rating.getMovieId()).retrieve().bodyToMono(Movie.class).block();
+		// return Collections.singletonList(new CatalogItem(userId, "Transformer", 3));
 	}
 }
