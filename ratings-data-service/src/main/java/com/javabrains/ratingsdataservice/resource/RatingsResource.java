@@ -14,10 +14,10 @@ import com.javabrains.ratingsdataservice.model.UserRating;
 @RequestMapping("/ratings")
 public class RatingsResource {
 
-	@RequestMapping("/{movieId}")
+	/*@RequestMapping("/{movieId}")
 	public Rating getRating(@PathVariable String movieId) {
 		return new Rating(movieId, 4);
-	}
+	}*/
 	
 	/*Avoid returning list in response*/
 	@RequestMapping("/{userId}")

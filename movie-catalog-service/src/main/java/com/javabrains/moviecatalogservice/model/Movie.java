@@ -4,6 +4,7 @@ public class Movie {
 	private int id;
 	private String name;
 	
+	public Movie() {}
 	public Movie(int id, String name) {
 		super();
 		this.id = id;

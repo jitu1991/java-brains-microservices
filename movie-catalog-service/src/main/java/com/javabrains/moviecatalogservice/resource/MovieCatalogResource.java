@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +32,16 @@ public class MovieCatalogResource {
 
 	@GetMapping("/{userId}")
 	public List<CatalogItem> getCatalog(@PathVariable String userId) {
-		UserRating ratings = restTemplate.getForObject("http://localhost:8082/ratingdata/users/" + userId,
+		/*UserRating ratings = restTemplate.getForObject("http://localhost:8083/ratings/" + userId,
+				UserRating.class);*/
+		//Call through eureka
+		UserRating ratings = restTemplate.getForObject("http://ratings-data-service/ratings/" + userId,
 				UserRating.class);
 
 		return ratings.getUserRating().stream().map(rating -> {
 			// For each movie Id, call movie-info-service and get details
-			Movie movie = restTemplate.getForObject("http://localhost:8081/movies/" + rating.getMovieId(), Movie.class);
+			//Movie movie = restTemplate.getForObject("http://localhost:8082/movies/" + rating.getMovieId(), Movie.class);
+			Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
 			return new CatalogItem(movie.getName(), "Test", rating.getRating());
 		}).collect(Collectors.toList());
 

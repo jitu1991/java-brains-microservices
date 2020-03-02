@@ -3,6 +3,10 @@ package com.javabrains.moviecatalogservice.model;
 public class Rating {
 	public String movieId;
 	public int rating;
+	
+	public Rating() {
+		
+	}
 	public Rating(String movieId, int rating) {
 		super();
 		this.movieId = movieId;

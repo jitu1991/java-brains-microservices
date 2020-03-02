@@ -13,7 +13,7 @@ import com.javabrains.movieinfoservice.model.Movie;
 public class MoviesResource {
 
 	@RequestMapping("/{movieId}")
-	public List<Movie> getMovies(String movieId) {
-		return Collections.singletonList(new Movie(1, "Transformer"));
+	public Movie getMovies(String movieId) {
+		return new Movie(1, "Transformer");
 	}
 }

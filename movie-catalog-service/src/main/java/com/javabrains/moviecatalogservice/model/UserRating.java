@@ -4,7 +4,9 @@ import java.util.List;
 
 public class UserRating {
 	
-	
+	public UserRating() {
+		
+	}
 	public UserRating(List<Rating> userRating) {
 		super();
 		this.userRating = userRating;
