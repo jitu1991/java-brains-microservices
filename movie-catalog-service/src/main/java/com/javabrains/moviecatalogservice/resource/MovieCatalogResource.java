@@ -19,6 +19,7 @@ import com.javabrains.moviecatalogservice.model.CatalogItem;
 import com.javabrains.moviecatalogservice.model.Movie;
 import com.javabrains.moviecatalogservice.model.Rating;
 import com.javabrains.moviecatalogservice.model.UserRating;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @RestController
 @RequestMapping("/catalog")
@@ -31,6 +32,7 @@ public class MovieCatalogResource {
 	WebClient.Builder webClientBuilder;
 
 	@GetMapping("/{userId}")
+	@HystrixCommand(fallbackMethod = "getFallbackCatalog")
 	public List<CatalogItem> getCatalog(@PathVariable String userId) {
 		/*UserRating ratings = restTemplate.getForObject("http://localhost:8083/ratings/" + userId,
 				UserRating.class);*/
@@ -54,4 +56,9 @@ public class MovieCatalogResource {
 		// rating.getMovieId()).retrieve().bodyToMono(Movie.class).block();
 		// return Collections.singletonList(new CatalogItem(userId, "Transformer", 3));
 	}
+	
+	public List<CatalogItem> getFallbackCatalog(@PathVariable String userId) {
+		return Arrays.asList(new CatalogItem("No Movie", "", 0));
+	}
+	
 }

@@ -3,6 +3,7 @@ package com.javabrains.moviecatalogservice.model;
 import java.util.List;
 
 public class UserRating {
+	private String userId;
 	
 	public UserRating() {
 		
@@ -11,6 +12,15 @@ public class UserRating {
 		super();
 		this.userRating = userRating;
 	}
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+
 
 	private List<Rating> userRating;
 
