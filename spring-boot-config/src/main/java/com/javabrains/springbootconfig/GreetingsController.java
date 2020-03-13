@@ -1,5 +1,8 @@
 package com.javabrains.springbootconfig;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,11 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/hello")
 public class GreetingsController {
 	
-	@Value("${greeting.message}")
-	public String greetingMessage;
+	//@Value("${my.greeting}")//Getting value from properties file
+	@Value("${my.greeting: default value}")//In case key doesnt exist in property file, default value will be assigned
+	private String greetingMessage;
+	
+	@Value("Some static message}")//Given string get assigned to variable
+	private String staticMessage;
+
+	@Value("${my.list.values}")//convert comma seperated values to list
+	private List<String> listValues;
+	
+	@Value("#{${dbValues}}")//# considers this as SPEL, spring expression language
+	private Map<String, String> dbValues;
 	
 	@GetMapping("/{userName}")
-	public String greetUser(@PathVariable String userName) {
-		return greetingMessage + " " + userName;
+	public String greeting(@PathVariable String userName) {
+		return greetingMessage + " " + staticMessage + listValues + dbValues;
 	}
 }
