@@ -3,6 +3,7 @@ package com.javabrains.springbootconfig;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +24,15 @@ public class GreetingsController {
 	@Value("${my.list.values}")//convert comma seperated values to list
 	private List<String> listValues;
 	
-	@Value("#{${dbValues}}")//# considers this as SPEL, spring expression language
+	//@Value("#{${dbValues}}")//# considers this as SPEL, spring expression language
 	private Map<String, String> dbValues;
+	
+	@Autowired
+	private DbSettings dbSettings;
 	
 	@GetMapping("/{userName}")
 	public String greeting(@PathVariable String userName) {
-		return greetingMessage + " " + staticMessage + listValues + dbValues;
+		//return greetingMessage + " " + staticMessage + listValues + dbValues;
+		return dbSettings.getConnection() + dbSettings.getHost();
 	}
 }
