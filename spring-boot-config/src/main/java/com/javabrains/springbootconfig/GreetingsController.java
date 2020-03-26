@@ -37,7 +37,7 @@ public class GreetingsController {
 	@GetMapping("/{userName}")
 	public String greeting(@PathVariable String userName) {
 		//return greetingMessage + " " + staticMessage + listValues + dbValues;
-		return dbSettings.getConnection() + dbSettings.getHost();
+		return greetingMessage;//dbSettings.getConnection() + dbSettings.getHost();
 	}
 	
 	@GetMapping("/envdetails")
